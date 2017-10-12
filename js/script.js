@@ -1,25 +1,35 @@
-var result = '0';
-var action = '';
-var number = '';
+var result = lastResult = number = action = '0';
 var operation = '';
 window.onload = function(){
-
-document.getElementById('result').innerHTML = result;
+  document.getElementById('result').innerHTML = result;
 };
 
 function clearResult(){
-  result = '0';
-  action = result
-    dots = 0;
+  result = lastResult = action = '0';
+  dots = 0;
   document.getElementById('result').innerHTML = result;
 }
 function numberInput(number){
+
+  if(digitLimit()){
+    return false;
+  }
+
   if (action == 0 || action == '') {  // jei veiksmas 0
     action = number;
     document.getElementById("result").innerHTML = number;
   } else{  // jei veiksmas daugiau > 0
   action = action + '' + number;
   document.getElementById("result").innerHTML = action;
+  }
+}
+
+function digitLimit(){
+  if(action.length > 8){
+    return true;
+  }
+  else{
+    return false;
   }
 }
 
@@ -75,19 +85,25 @@ function addDot(){
 }
 
 function showResult(){
-  if(operation == 'plus'){
-    result = parseFloat(result) + parseFloat(action); // tekstini formata keicia i realuji skaiciu
-  } else if(operation == 'minus'){
-    result -= parseFloat(action);
-  } else if(operation == 'times'){
-    result *= parseFloat(action);
-  } else if(operation == 'divide'){
-    result /= parseFloat(action);
-  } else{
-    result = '0';
+
+  lastResult = parseFloat(lastResult);
+  if(lastResult != ''){
+    result = lastResult
   }
 
-  document.getElementById("result").innerHTML = result;
+  if(operation == 'plus'){
+    lastResult = parseFloat(result) + parseFloat(action); // tekstini formata keicia i realuji skaiciu
+  } else if(operation == 'minus'){
+    lastResult = parseFloat(result) - parseFloat(action);
+  } else if(operation == 'times'){
+    lastResult = parseFloat(result) * parseFloat(action);
+  } else if(operation == 'divide'){
+    lastResult = parseFloat(result) / parseFloat(action);
+  } else{
+    lastResult = '0';
+  }
+
+  document.getElementById("result").innerHTML = lastResult;
   result = action = operation = ''
   //isvalome visus duomenis skaiciuotuve
 }
